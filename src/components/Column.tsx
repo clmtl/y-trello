@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { BsFillSendCheckFill } from "react-icons/bs";
+import { MdCancel } from "react-icons/md";
 
 interface Props {
   title: string;
@@ -7,6 +9,13 @@ interface Props {
 
 const Column: React.FC<Props> = ({ title, children }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [cardContent, setCardContent] = useState("");
+
+  const sendCard = () => {
+    console.log(cardContent);
+    setIsEditing(false);
+    setCardContent("");
+  };
 
   return (
     <div className="w-56 rounded-md bg-gray-900 p-2 shadow-xl ">
@@ -19,17 +28,21 @@ const Column: React.FC<Props> = ({ title, children }) => {
           <div className="">
             <input
               type="text"
-              className="w-full rounded-md bg-gray-800 p-1"
-              placeholder="Enter a title for this card..."
+              value={cardContent}
+              onChange={(e) => setCardContent(e.target.value)}
+              className="w-full rounded-md bg-gray-800 p-1 text-gray-200"
+              placeholder="Enter a title for the task..."
             />
-            <div className="mt-2 flex justify-between">
+            <div className="ml-4 mt-2 flex space-x-4">
               <button
                 className="text-gray-400"
                 onClick={() => setIsEditing(false)}
               >
-                Cancel
+                <MdCancel />
               </button>
-              <button className="text-gray-400">Add Ticket</button>
+              <button className="text-gray-400" onClick={sendCard}>
+                <BsFillSendCheckFill />
+              </button>
             </div>
           </div>
         ) : (
