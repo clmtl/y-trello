@@ -5,6 +5,7 @@ import { MdKeyboardArrowUp } from "react-icons/md";
 import { AiOutlineMinus } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
+import { Priority } from "@prisma/client";
 
 interface Props {
   title: string;
@@ -19,7 +20,18 @@ const TaskCard: React.FC<Props> = ({ title, description, priority, state }) => {
     console.log("changeState");
   };
 
-  const returnPiorityIcon = () => {};
+  const returnPiorityIcon = () => {
+    if (priority === Priority.HIGHEST)
+      return <MdKeyboardDoubleArrowUp className="text-red-800" />;
+    if (priority === Priority.HIGH)
+      return <MdKeyboardArrowUp className="text-orange-500" />;
+    if (priority === Priority.MEDIUM)
+      return <AiOutlineMinus className="text-white" />;
+    if (priority === Priority.LOW)
+      return <MdKeyboardArrowDown className="text-blue-600" />;
+    if (priority === Priority.LOWEST)
+      return <MdKeyboardDoubleArrowDown className="text-green-800" />;
+  };
 
   return (
     <>
@@ -28,8 +40,10 @@ const TaskCard: React.FC<Props> = ({ title, description, priority, state }) => {
         onClick={() => setPopupOpen(true)}
       >
         <p className="text-gray-300">{title}</p>
-        <p>{description.length > 0 && <BsTextLeft />}</p>
-        <p>{priority}</p>
+        <div className="flex content-between">
+          <p>{description.length > 0 && <BsTextLeft />}</p>
+          <p>{returnPiorityIcon()}</p>
+        </div>
       </div>
       {popupOpen ? (
         <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-black bg-opacity-50">

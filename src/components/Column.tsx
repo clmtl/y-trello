@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BsFillSendCheckFill } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
+import { api } from "~/utils/api";
 
 interface Props {
   title: string;
@@ -11,11 +12,11 @@ const Column: React.FC<Props> = ({ title, children }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [cardContent, setCardContent] = useState("");
 
-  const sendCard = () => {
-    console.log(cardContent);
-    setIsEditing(false);
-    setCardContent("");
-  };
+  const { mutate: createCard } = api.task.create.useMutation({
+    onSuccess: () => {
+      console.log("success");
+    },
+  });
 
   return (
     <div className="w-56 rounded-md bg-gray-900 p-2 shadow-xl ">
@@ -40,7 +41,14 @@ const Column: React.FC<Props> = ({ title, children }) => {
               >
                 <MdCancel />
               </button>
-              <button className="text-gray-400" onClick={sendCard}>
+              <button
+                className="text-gray-400"
+                onClick={() =>
+                  createCard({
+                    title: cardContent,
+                  })
+                }
+              >
                 <BsFillSendCheckFill />
               </button>
             </div>

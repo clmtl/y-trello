@@ -9,8 +9,8 @@ const Kanban: React.FC = () => {
           <TaskCard
             title="Créer un trello"
             description="Tout coder comme un malade"
-            priority="High"
-            state="Todo"
+            priority="HIGHEST"
+            state="TODO"
           />
         </Column>
         <Column title="In Progress">
