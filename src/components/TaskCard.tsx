@@ -8,7 +8,7 @@ import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 import { Priority } from "@prisma/client";
 
 interface Props {
-  id: string;
+  id: number;
   title: string;
   description: string;
   priority: string;
