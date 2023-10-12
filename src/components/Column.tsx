@@ -1,12 +1,24 @@
+import { type State } from "@prisma/client";
 import { useState } from "react";
+import { BsFillSendCheckFill } from "react-icons/bs";
+import { MdCancel } from "react-icons/md";
+import { api } from "~/utils/api";
 
 interface Props {
   title: string;
+  state: State;
   children: React.ReactNode;
 }
 
-const Column: React.FC<Props> = ({ title, children }) => {
+const Column: React.FC<Props> = ({ title, state, children }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [cardContent, setCardContent] = useState("");
+
+  const { mutate: createCard } = api.task.create.useMutation({
+    onSuccess: () => {
+      console.log("success");
+    },
+  });
 
   return (
     <div className="w-56 rounded-md bg-gray-900 p-2 shadow-xl ">
@@ -19,17 +31,29 @@ const Column: React.FC<Props> = ({ title, children }) => {
           <div className="">
             <input
               type="text"
-              className="w-full rounded-md bg-gray-800 p-1"
-              placeholder="Enter a title for this card..."
+              value={cardContent}
+              onChange={(e) => setCardContent(e.target.value)}
+              className="w-full rounded-md bg-gray-800 p-1 text-gray-200"
+              placeholder="Enter a title for the task..."
             />
-            <div className="mt-2 flex justify-between">
+            <div className="ml-4 mt-2 flex space-x-4">
               <button
                 className="text-gray-400"
                 onClick={() => setIsEditing(false)}
               >
-                Cancel
+                <MdCancel />
               </button>
-              <button className="text-gray-400">Add Ticket</button>
+              <button
+                className="text-gray-400"
+                onClick={() =>
+                  createCard({
+                    title: cardContent,
+                    state: state,
+                  })
+                }
+              >
+                <BsFillSendCheckFill />
+              </button>
             </div>
           </div>
         ) : (
