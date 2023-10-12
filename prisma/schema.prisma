@@ -14,7 +14,7 @@ generator client {
 model Task {
     id          Int      @id @default(autoincrement())
     title       String
-    description String
+    description String?
     priority    Priority @default(MEDIUM)
     state       State    @default(TODO)
     createdAt   DateTime @default(now())
