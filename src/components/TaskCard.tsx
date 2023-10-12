@@ -60,8 +60,12 @@ const TaskCard: React.FC<Props> = ({
         <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-black bg-opacity-50 p-14 text-gray-300">
           <div className="h-1/2 w-1/2 rounded-lg bg-gray-700">
             <div className="flex items-center justify-between">
-              <p className="text-white">{title}</p>
-              <button onClick={() => setPopupOpen(false)}>X</button>
+              <p className="mb-2 text-2xl text-white">
+                {title} : {state}
+              </p>
+              <button className="mr-4" onClick={() => setPopupOpen(false)}>
+                X
+              </button>
             </div>
             <div className="m-2 flex flex-col border-b-2 border-t-2 pb-2 text-xl">
               {" "}
@@ -84,9 +88,6 @@ const TaskCard: React.FC<Props> = ({
                 <option value="LOWEST">Lowest</option>
               </select>
             </div>
-
-            <p>State : {state}</p>
-            <button onClick={changeState}>Change state</button>
           </div>
         </div>
       ) : (
