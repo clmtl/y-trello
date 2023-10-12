@@ -28,11 +28,13 @@ export const taskRouter = createTRPCRouter({
   }),
 
   create: protectedProcedure
-  .input(z.object({ title: z.string() }))
+  .input(z.object({ title: z.string(), state: z.nativeEnum(State) }))
   .mutation(async ({ ctx, input }) => {
     const task = await ctx.db.task.create({
       data:{
-        title : input.title
+        title : input.title,
+        state: input.state,
+        description: "Basic Description"
       },
     });
 

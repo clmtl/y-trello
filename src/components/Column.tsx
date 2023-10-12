@@ -1,3 +1,4 @@
+import { type State } from "@prisma/client";
 import { useState } from "react";
 import { BsFillSendCheckFill } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
@@ -5,10 +6,11 @@ import { api } from "~/utils/api";
 
 interface Props {
   title: string;
+  state: State;
   children: React.ReactNode;
 }
 
-const Column: React.FC<Props> = ({ title, children }) => {
+const Column: React.FC<Props> = ({ title, state, children }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [cardContent, setCardContent] = useState("");
 
@@ -46,6 +48,7 @@ const Column: React.FC<Props> = ({ title, children }) => {
                 onClick={() =>
                   createCard({
                     title: cardContent,
+                    state: state,
                   })
                 }
               >
