@@ -13,16 +13,18 @@ interface Props {
 const Column: React.FC<Props> = ({ title, state, children }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [cardContent, setCardContent] = useState("");
+  const ctx = api.useContext();
 
   const { mutate: createCard } = api.task.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       setIsEditing(false);
       setCardContent("");
+      await ctx.task.getAll.invalidate();
     },
   });
 
   return (
-    <div className="w-56 rounded-md bg-gray-900 p-2 shadow-xl ">
+    <div className="mt-10 w-56 rounded-md bg-gray-900 p-2 shadow-xl">
       <h2 className=" border-b-2 border-b-gray-400 text-xl font-semibold text-gray-400">
         {title}
       </h2>

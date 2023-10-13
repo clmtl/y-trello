@@ -28,13 +28,6 @@ const TaskCard: React.FC<Props> = ({
   const [tempDescription, setTempDescription] = useState(description);
   const [tempPriority, setTempPriority] = useState<Priority>(priority);
   const [tempState, setTempState] = useState<State>(state);
-  const priorityOptions = [
-    { value: "HIGHEST", label: "Highest", color: "#36B37E" },
-    { value: "HIGH", label: "High", color: "#00875A" },
-    { value: "MEDIUM", label: "Medium", color: "#00875A" },
-    { value: "LOW", label: "Low", color: "#253858" },
-    { value: "LOWEST", label: "Lowest", color: "#666666" },
-  ];
 
   const ctx = api.useContext();
 
