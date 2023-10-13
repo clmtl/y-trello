@@ -8,14 +8,14 @@ const Kanban: React.FC = () => {
   tasks.isLoading && console.log("loading");
   return (
     <div>
-      <div className="ml-10 mt-10 flex space-x-10">
+      <div className="ml-10 flex space-x-10">
         <Column title="Todo" state="TODO">
           {tasks.data?.map((task) =>
             task.state === "TODO" ? (
               <TaskCard
                 id={task.id}
                 title={task.title}
-                description={task.description || ""}
+                description={task.description ? task.description : ""}
                 priority={task.priority}
                 state={task.state}
                 key={task.id + "-key"}
@@ -31,7 +31,7 @@ const Kanban: React.FC = () => {
               <TaskCard
                 id={task.id}
                 title={task.title}
-                description={task.description || ""}
+                description={task.description ? task.description : ""}
                 priority={task.priority}
                 state={task.state}
                 key={task.id + "-key"}
@@ -47,7 +47,7 @@ const Kanban: React.FC = () => {
               <TaskCard
                 id={task.id}
                 title={task.title}
-                description={task.description || ""}
+                description={task.description ? task.description : ""}
                 priority={task.priority}
                 state={task.state}
                 key={task.id + "-key"}

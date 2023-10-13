@@ -5,14 +5,15 @@ import { MdKeyboardArrowUp } from "react-icons/md";
 import { AiOutlineMinus } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
-import { Priority } from "@prisma/client";
+import { Priority, type State } from "@prisma/client";
+import { api } from "~/utils/api";
 
 interface Props {
   id: number;
   title: string;
   description: string;
-  priority: string;
-  state: string;
+  priority: Priority;
+  state: State;
 }
 
 const TaskCard: React.FC<Props> = ({
@@ -23,13 +24,19 @@ const TaskCard: React.FC<Props> = ({
   state,
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const changeState = () => {
-    console.log("changeState");
-  };
   const [tempTitle, setTempTitle] = useState(title);
   const [tempDescription, setTempDescription] = useState(description);
-  const [tempPriority, setTempPriority] = useState(priority);
-  const [tempState, setTempState] = useState(state);
+  const [tempPriority, setTempPriority] = useState<Priority>(priority);
+  const [tempState, setTempState] = useState<State>(state);
+
+  const ctx = api.useContext();
+
+  const { mutate: updateCard } = api.task.update.useMutation({
+    onSuccess: async () => {
+      setPopupOpen(false);
+      await ctx.task.getAll.invalidate();
+    },
+  });
 
   const returnPiorityIcon = () => {
     if (priority === Priority.HIGHEST)
@@ -72,7 +79,12 @@ const TaskCard: React.FC<Props> = ({
               <p className="flex">
                 <BsTextLeft className="text-2xl" /> Description
               </p>
-              <textarea value={description} className="bg-slate-500 text-sm" />
+              <textarea
+                value={tempDescription}
+                onChange={(e) => setTempDescription(e.target.value)}
+                readOnly={false}
+                className="bg-slate-500 text-sm"
+              />
             </div>
             <p className="m-2 text-xl">Priority </p>
             <div className="m-2 flex border-b-2">
@@ -80,7 +92,14 @@ const TaskCard: React.FC<Props> = ({
                 {priority} {returnPiorityIcon()}
               </p>
               <p className="m-2 flex pl-4">Update Priority : </p>
-              <select name="Update Priority" id="cars" className="bg-gray-600">
+              <select
+                name="Update Priority"
+                id="cars"
+                className="bg-gray-600"
+                onChange={(e) => setTempPriority(e.target.value as Priority)}
+                defaultValue={priority}
+              >
+                <option disabled>{priority}</option>
                 <option value="HIGHEST">Highest</option>
                 <option value="HIGH">High</option>
                 <option value="MEDIUM">Medium</option>
@@ -88,6 +107,20 @@ const TaskCard: React.FC<Props> = ({
                 <option value="LOWEST">Lowest</option>
               </select>
             </div>
+            <button
+              onClick={() =>
+                updateCard({
+                  id: id,
+                  title: tempTitle,
+                  description: tempDescription,
+                  priority: tempPriority,
+                  state: tempState,
+                })
+              }
+            >
+              {" "}
+              Send Modifications{" "}
+            </button>
           </div>
         </div>
       ) : (

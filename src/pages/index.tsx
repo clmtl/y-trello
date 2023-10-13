@@ -1,5 +1,7 @@
+import { url } from "inspector";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import Kanban from "~/components/Kanban";
 
@@ -17,9 +19,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="">
-        <div className="bg-[url('../../oceanBg.jpeg')]"></div>
-        <Kanban />
-        <AuthShowcase />
+        <div className="h-screen w-screen bg-gradient-to-br from-purple-900 to-slate-900">
+          <Kanban />
+          <AuthShowcase />
+        </div>
       </main>
     </>
   );
@@ -29,10 +32,19 @@ function AuthShowcase() {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="absolute bottom-0 flex items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+        {sessionData && <span> {sessionData.user?.name}</span>}
       </p>
+      {sessionData?.user.image && (
+        <Image
+          src={sessionData?.user.image}
+          alt="usr pp"
+          width={500}
+          height={500}
+          className="h-10 w-10 rounded-full"
+        />
+      )}
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
