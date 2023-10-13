@@ -1,3 +1,4 @@
+import { url } from "inspector";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
@@ -17,9 +18,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="">
-        <div className="bg-[url('../../oceanBg.jpeg')]"></div>
-        <Kanban />
-        <AuthShowcase />
+        <div className="h-screen w-screen bg-red-700">
+          <Kanban />
+          <AuthShowcase />
+        </div>
       </main>
     </>
   );

@@ -16,7 +16,8 @@ const Column: React.FC<Props> = ({ title, state, children }) => {
 
   const { mutate: createCard } = api.task.create.useMutation({
     onSuccess: () => {
-      console.log("success");
+      setIsEditing(false);
+      setCardContent("");
     },
   });
 

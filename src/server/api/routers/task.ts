@@ -34,7 +34,7 @@ export const taskRouter = createTRPCRouter({
       data:{
         title : input.title,
         state: input.state,
-        description: "Basic Description"
+        description: "No description yet",
       },
     });
 
@@ -42,7 +42,7 @@ export const taskRouter = createTRPCRouter({
   }),
 
   update: protectedProcedure
-  .input(z.object({ id: z.string(), title: z.string(), description: z.string(), state: z.nativeEnum(State), priority: z.nativeEnum(Priority) }))
+  .input(z.object({ id: z.number(), title: z.string(), description: z.string(), state: z.nativeEnum(State), priority: z.nativeEnum(Priority) }))
   .mutation(async ({ ctx, input }) => {
     const task = await ctx.db.task.update({
       where: {
