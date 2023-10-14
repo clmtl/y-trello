@@ -8,7 +8,7 @@ const Kanban: React.FC = () => {
   tasks.isLoading && console.log("loading");
   return (
     <div>
-      <div className="ml-10 flex space-x-10">
+      <div className="ml-2 flex h-screen space-x-10">
         <Column title="Todo" state="TODO">
           {tasks.data?.map((task) =>
             task.state === "TODO" ? (

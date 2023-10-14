@@ -4,6 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import Kanban from "~/components/Kanban";
+import { AiOutlineLogout } from "react-icons/ai";
 
 import { api } from "~/utils/api";
 
@@ -32,10 +33,7 @@ function AuthShowcase() {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="absolute bottom-0 flex items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span> {sessionData.user?.name}</span>}
-      </p>
+    <div className="absolute right-2 top-2 flex items-center justify-center gap-2">
       {sessionData?.user.image && (
         <Image
           src={sessionData?.user.image}
@@ -46,10 +44,14 @@ function AuthShowcase() {
         />
       )}
       <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+        className="font-semibol flex h-10 w-10 items-center justify-center rounded-full bg-white/70 py-3 no-underline transition hover:bg-white/20"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
-        {sessionData ? "Sign out" : "Sign in"}
+        {sessionData ? (
+          <AiOutlineLogout className="text-2xl text-black" />
+        ) : (
+          "Sign in"
+        )}
       </button>
     </div>
   );

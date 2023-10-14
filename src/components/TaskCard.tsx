@@ -6,6 +6,10 @@ import { AiOutlineMinus } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 import { Priority, type State } from "@prisma/client";
+import {
+  BsFillArrowLeftCircleFill,
+  BsFillArrowRightCircleFill,
+} from "react-icons/bs";
 import { api } from "~/utils/api";
 
 interface Props {
@@ -27,7 +31,6 @@ const TaskCard: React.FC<Props> = ({
   const [tempTitle, setTempTitle] = useState(title);
   const [tempDescription, setTempDescription] = useState(description);
   const [tempPriority, setTempPriority] = useState<Priority>(priority);
-  const [tempState, setTempState] = useState<State>(state);
 
   const ctx = api.useContext();
 
@@ -38,34 +41,109 @@ const TaskCard: React.FC<Props> = ({
     },
   });
 
+  const { mutate: deleteCard } = api.task.delete.useMutation({
+    onSuccess: async () => {
+      setPopupOpen(false);
+      await ctx.task.getAll.invalidate();
+    },
+  });
+
+  const mooveCardLeft = () => {
+    if (state === "TODO") return;
+
+    if (state === "IN_PROGRESS") {
+      updateCard({
+        id: id,
+        title: title,
+        description: description,
+        priority: priority,
+        state: "TODO",
+      });
+    }
+
+    if (state === "DONE") {
+      updateCard({
+        id: id,
+        title: title,
+        description: description,
+        priority: priority,
+        state: "IN_PROGRESS",
+      });
+    }
+  };
+
+  const mooveCardRight = () => {
+    if (state === "DONE") return;
+    if (state === "TODO") {
+      updateCard({
+        id: id,
+        title: title,
+        description: description,
+        priority: priority,
+        state: "IN_PROGRESS",
+      });
+    }
+    if (state === "IN_PROGRESS") {
+      updateCard({
+        id: id,
+        title: title,
+        description: description,
+        priority: priority,
+        state: "DONE",
+      });
+    }
+  };
+
   const returnPiorityIcon = () => {
     if (priority === Priority.HIGHEST)
-      return <MdKeyboardDoubleArrowUp className="text-xl text-red-800" />;
+      return (
+        <MdKeyboardDoubleArrowUp className="rounded-full border-2 bg-slate-300 text-xl text-red-800" />
+      );
     if (priority === Priority.HIGH)
-      return <MdKeyboardArrowUp className="text-xl text-orange-500" />;
+      return (
+        <MdKeyboardArrowUp className="rounded-full border-2 bg-slate-300 text-xl text-orange-500" />
+      );
     if (priority === Priority.MEDIUM)
-      return <AiOutlineMinus className="text-xl text-white" />;
+      return (
+        <AiOutlineMinus className="rounded-full border-2 bg-slate-300 text-xl text-black" />
+      );
     if (priority === Priority.LOW)
-      return <MdKeyboardArrowDown className="text-xl text-blue-600" />;
+      return (
+        <MdKeyboardArrowDown className="rounded-full border-2 bg-slate-300 text-xl text-blue-600" />
+      );
     if (priority === Priority.LOWEST)
-      return <MdKeyboardDoubleArrowDown className="text-xl text-green-800" />;
+      return (
+        <MdKeyboardDoubleArrowDown className="rounded-full border-2 bg-slate-300 text-xl text-green-800" />
+      );
   };
 
   return (
     <>
-      <div
-        className="mb-2 mt-2 rounded-lg bg-gray-700"
-        onClick={() => setPopupOpen(true)}
-      >
-        <p className="text-gray-300">{title}</p>
-        <div className="flex content-between">
-          <p>{description.length > 0 && <BsTextLeft />}</p>
-          <p>{returnPiorityIcon()}</p>
+      <div className="relative mb-2 mt-2 h-28 rounded-lg bg-gray-700">
+        <p
+          className="mb-2 ml-2 text-xl text-gray-300"
+          onClick={() => setPopupOpen(true)}
+        >
+          {title}
+        </p>
+        <p className="ml-2 text-xs text-gray-900">{description}</p>
+        <div className="absolute right-2 top-2">
+          <p className="">{returnPiorityIcon()}</p>
+        </div>
+        <div className="absolute bottom-2 right-2 flex">
+          <BsFillArrowLeftCircleFill
+            className="cursor-pointer rounded-full text-2xl text-slate-400 shadow-sm"
+            onClick={mooveCardLeft}
+          />
+          <BsFillArrowRightCircleFill
+            className="ml-2 cursor-pointer rounded-full text-2xl text-slate-400 shadow-sm"
+            onClick={mooveCardRight}
+          />
         </div>
       </div>
       {popupOpen ? (
-        <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-black bg-opacity-50 p-14 text-gray-300">
-          <div className="h-1/2 w-1/2 rounded-lg bg-gray-700">
+        <div className="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-black bg-opacity-50 p-14 text-gray-300">
+          <div className="relative h-1/2 w-1/2 rounded-lg bg-gray-700">
             <div className="flex items-center justify-between">
               <p className="mb-2 text-2xl text-white">
                 {title} : {state}
@@ -114,9 +192,10 @@ const TaskCard: React.FC<Props> = ({
                   title: tempTitle,
                   description: tempDescription,
                   priority: tempPriority,
-                  state: tempState,
+                  state: state,
                 })
               }
+              className="absolute bottom-2 right-2 rounded-full border-2 border-gray-300 bg-gray-600 p-5 text-gray-300"
             >
               {" "}
               Send Modifications{" "}
