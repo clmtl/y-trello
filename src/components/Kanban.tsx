@@ -6,6 +6,10 @@ const Kanban: React.FC = () => {
   const tasks = api.task.getAll.useQuery();
   tasks.isError && console.log("error");
   tasks.isLoading && console.log("loading");
+
+  setInterval(() => {
+    tasks;
+  }, 3000);
   return (
     <div>
       <div className="ml-2 flex h-screen space-x-10">
