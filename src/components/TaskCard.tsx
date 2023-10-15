@@ -9,6 +9,7 @@ import { Priority, type State } from "@prisma/client";
 import {
   BsFillArrowLeftCircleFill,
   BsFillArrowRightCircleFill,
+  BsFillTrashFill,
 } from "react-icons/bs";
 import { api } from "~/utils/api";
 
@@ -186,6 +187,12 @@ const TaskCard: React.FC<Props> = ({
               </select>
             </div>
             <button
+              onClick={() => deleteCard({ id })}
+              className=" font-semibol absolute bottom-2 left-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/70 py-3 no-underline transition hover:bg-white/20"
+            >
+              <BsFillTrashFill className="text-xl text-red-900" />
+            </button>
+            <button
               onClick={() =>
                 updateCard({
                   id: id,
@@ -195,7 +202,7 @@ const TaskCard: React.FC<Props> = ({
                   state: state,
                 })
               }
-              className="absolute bottom-2 right-2 rounded-full border-2 border-gray-300 bg-gray-600 p-5 text-gray-300"
+              className="text-gray-30 absolute bottom-2 right-2 rounded-full border-2 border-gray-300 bg-gray-600 p-5 text-sm"
             >
               {" "}
               Send Modifications{" "}
